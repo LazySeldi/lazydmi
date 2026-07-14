@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LAZYDMI_VER "0.3.0"
+#define LAZYDMI_MAJOR 0
+#define LAZYDMI_MINOR 3
+#define LAZYDMI_PATCH 0
+
 static void printType0(lazybiosCTX_t* ctx) {
 	printf("=== BIOS INFORMATION ===\n");
 
@@ -905,7 +910,7 @@ static inline void print_usage(const char* progname) {
 }
 
 int main(int argc, const char* argv[]) {
-	printf("lazybios Version: %s\n", LAZYBIOS_VER);
+	printf("Versions:\n Lazybios = %s\n Lazydmi = %s\n", LAZYBIOS_VER, LAZYDMI_VER);
 	printf("=============================================\n\n");
 
 	lazybiosCTX_t* ctx = lazybiosCTXNew();
