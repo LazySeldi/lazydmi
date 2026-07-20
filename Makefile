@@ -2,16 +2,18 @@ SHELL = /bin/sh
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-PREFIX ?= /usr/local
+PREFIX ?= /usr
 BINDIR  ?= $(PREFIX)/bin
+LIBDIR  ?= $(PREFIX)/lib
+INCDIR  ?= /usr/include
 
 INSTALL = install
 INSTALL_PROGRAM = $(INSTALL) -m 755
 INSTALL_DATA = $(INSTALL) -m 644
 
 CC      = gcc
-CFLAGS  = -Wall -Wextra -O2 -Iinclude -D_GNU_SOURCE
-LDFLAGS = -Llib -llazybios
+CFLAGS  = -Wall -Wextra -O2 -I$(INCDIR) -D_GNU_SOURCE
+LDFLAGS = -L$(LIBDIR) -llazybios
 
 TARGET = lazydmi
 SRCS   = lazydmi.c
