@@ -10,8 +10,8 @@ INSTALL_PROGRAM = $(INSTALL) -m 755
 INSTALL_DATA = $(INSTALL) -m 644
 
 CC      = gcc
-CFLAGS  = -Wall -Wextra -O2 -D_GNU_SOURCE
-LDFLAGS = -llazybios
+CFLAGS  = -Wall -Wextra -O2 -Iinclude -D_GNU_SOURCE
+LDFLAGS = -Llib -llazybios
 
 TARGET = lazydmi
 SRCS   = lazydmi.c
@@ -24,7 +24,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-%.o: %.c lazybios.h
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
@@ -33,7 +33,7 @@ clean:
 distclean: clean
 
 install: $(TARGET)
-	install -d $(DESTDIR)$(BINDIR)
+	mkdir -p $(DESTDIR)$(BINDIR)
 	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)
 
 uninstall:
