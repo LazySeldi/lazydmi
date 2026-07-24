@@ -1,24 +1,6 @@
-/*
- * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * This file is part of lazybios.
- *
- * lazybios is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * lazybios is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with lazybios. If not, see <https://www.gnu.org/licenses/>.
- */
-#define LAZYDMI_VER "0.7.0"
-#define LAZYDMI_MAJOR 0
-#define LAZYDMI_MINOR 7
+#define LAZYDMI_VER "1.0.0"
+#define LAZYDMI_MAJOR 1
+#define LAZYDMI_MINOR 0
 #define LAZYDMI_PATCH 0
 
 #include "lazybios.h"
@@ -2107,10 +2089,10 @@ static void printType28(lazybiosCTX_t* ctx) {
    }
    if (LAZYBIOS_FIELD_STATUS(type28, minimum_value) != LAZYBIOS_FIELD_PRESENT) {
     printf("Minimum Value: Not Present\n");
-   } else if (type28->minimum_value == 0x8000) {
+   } else if (type28->minimum_value == INT16_MIN) {
     printf("Minimum Value: Unknown\n");
    } else {
-    printf("Minimum Value: %hu.%hu degrees C\n", type28->minimum_value / 10, type28->minimum_value % 10);
+    printf("Minimum Value: %.1f degrees C\n", (double)type28->minimum_value / 10.0);
    }
    if (LAZYBIOS_FIELD_STATUS(type28, resolution) != LAZYBIOS_FIELD_PRESENT) {
     printf("Resolution: Not Present\n");
