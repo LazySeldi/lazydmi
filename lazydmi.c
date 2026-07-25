@@ -1,5 +1,5 @@
 /*
-* SPDX-License-Identifier: LGPL-2.1-or-later
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  *
  * This file is part of lazybios.
  *
@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with lazybios. If not, see <https://www.gnu.org/licenses/>.
  */
-#define LAZYDMI_VER "1.0.0"
+#define LAZYDMI_VER "1.1.0"
 #define LAZYDMI_MAJOR 1
-#define LAZYDMI_MINOR 0
+#define LAZYDMI_MINOR 1
 #define LAZYDMI_PATCH 0
 
 #include "lazybios.h"
