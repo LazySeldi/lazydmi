@@ -2755,7 +2755,10 @@ int main (int argc, const char *argv[]) {
 		}
 	}
 	if (dump_dir) {
-		lazybiosInit(ctx);
+		if (lazybiosInit(ctx) != 0) {
+			printf("Could not initialize lazybios library!");
+			exit(-1);
+		}
 		char path_entry[1024];
 		char path_dmi[1024];
 		#if defined(_WIN32) || defined(_WIN64)
@@ -2792,6 +2795,7 @@ int main (int argc, const char *argv[]) {
 			return -1;
 		}
 		lazybiosCleanup(ctx);
+		return 0;
 	}
 	if (entry_file && dmi_file) {
 		if (lazybiosFile(ctx ,entry_file ,dmi_file) != 0) {
