@@ -12,7 +12,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 755
 INSTALL_DATA = $(INSTALL) -m 644
 
 CC      = gcc
-CFLAGS  = -Wall -Wextra -O2 -I$(INCDIR) -D_GNU_SOURCE
+CFLAGS  = -Wall -Wextra -O2 -I$(INCDIR)
 LDFLAGS = -L$(LIBDIR) -llazybios
 
 TARGET = lazydmi
