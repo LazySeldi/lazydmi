@@ -1120,8 +1120,8 @@ static int verbose_output = 0;
 
 static void printType0(lazybiosCTX_t *ctx) {
     printf("=== BIOS INFORMATION ===\n");
-    if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, ctx->DMIData);
-    if (ctx->Type0) {
+    if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
+    if (ctx->Type0 && ctx->type0_count > 0) {
         printf("Vendor: %s\n", ctx->Type0->vendor ? ctx->Type0->vendor : "Not Present");
         printf("Version: %s\n", ctx->Type0->version ? ctx->Type0->version : "Not Present");
         printf("Release Date: %s\n", ctx->Type0->release_date ? ctx->Type0->release_date : "Not Present");
@@ -1200,8 +1200,8 @@ static void printType0(lazybiosCTX_t *ctx) {
 
 static void printType1(lazybiosCTX_t *ctx) {
     printf("=== SYSTEM INFORMATION ===\n");
-    if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, ctx->DMIData);
-    if (ctx->Type1) {
+    if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
+    if (ctx->Type1 && ctx->type1_count > 0) {
         printf("Manufacturer: %s\n", ctx->Type1->manufacturer ? ctx->Type1->manufacturer : "Not Present");
         printf("Product name: %s\n", ctx->Type1->product_name ? ctx->Type1->product_name : "Not Present");
         printf("Version: %s\n", ctx->Type1->version ? ctx->Type1->version : "Not Present");
@@ -3976,7 +3976,7 @@ static void printType46(lazybiosCTX_t *ctx) {
 int print_smbios_version_info(lazybiosCTX_t *ctx) {
     if (!ctx) return -1;
     printf("=== SMBIOS INFORMATION ===\n");
-    lazybiosPrintVer(ctx);
+    lazybiosPrintSMVer(ctx);
     if (!verbose_output) {
         printf("Table size: %zu bytes\n\n", ctx->DMIData->dmi_len);
         return 0;
@@ -4028,7 +4028,7 @@ int print_smbios_version_info(lazybiosCTX_t *ctx) {
     return 0;
 }
 
-static void print_tool_versions(void) { printf("Using:\nlazybios: %s\nlazydmi: %s\n", LAZYBIOS_VER, LAZYDMI_VER); }
+static void print_tool_versions(void) { printf("Using:\nlazybios: %s\nlazydmi: %s\n", lazybiosVersion, LAZYDMI_VER); }
 
 static int parse_type_number(const char *arg, int *out) {
     char *endptr;
@@ -4272,10 +4272,10 @@ int main(int argc, const char *argv[]) {
     if (verbose_output) printf("Library initialized successfully!\n\n");
     print_smbios_version_info(ctx);
     if (print_all) {
-        if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, ctx->DMIData);
-        if (ctx->Type0 || verbose_output) printType0(ctx);
-        if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, ctx->DMIData);
-        if (ctx->Type1 || verbose_output) printType1(ctx);
+        if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
+        if (ctx->type0_count > 0 || verbose_output) printType0(ctx);
+        if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
+        if (ctx->type1_count > 0 || verbose_output) printType1(ctx);
         if (!ctx->Type2) ctx->Type2 = lazybiosGetType2(ctx->Type2, &ctx->type2_count, ctx->DMIData);
         if (ctx->type2_count > 0 || verbose_output) printType2(ctx);
         if (!ctx->Type3) ctx->Type3 = lazybiosGetType3(ctx->Type3, &ctx->type3_count, ctx->DMIData);
@@ -4370,11 +4370,11 @@ int main(int argc, const char *argv[]) {
 
         switch (type_to_print) {
             case 0:
-                if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, ctx->DMIData);
+                if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
                 printType0(ctx);
                 break;
             case 1:
-                if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, ctx->DMIData);
+                if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
                 printType1(ctx);
                 break;
             case 2:
