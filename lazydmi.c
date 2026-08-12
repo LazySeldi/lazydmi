@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with lazybios. If not, see <https://www.gnu.org/licenses/>.
  */
-#define LAZYDMI_VER "1.4.0"
-#define LAZYDMI_MAJOR 1
-#define LAZYDMI_MINOR 4
+#define LAZYDMI_VER "2.0.0"
+#define LAZYDMI_MAJOR 2
+#define LAZYDMI_MINOR 0
 #define LAZYDMI_PATCH 0
 
 #include <errno.h>
