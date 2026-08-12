@@ -16,16 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with lazybios. If not, see <https://www.gnu.org/licenses/>.
  */
-#define LAZYDMI_VER "1.3.0"
+#define LAZYDMI_VER "1.4.0"
 #define LAZYDMI_MAJOR 1
-#define LAZYDMI_MINOR 3
+#define LAZYDMI_MINOR 4
 #define LAZYDMI_PATCH 0
 
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lazybios.h"
+#include <lazybios/lazybios.h>
+#include <lazybios/json/lazybios_json.h>
 
 typedef struct {
     const char *name;
@@ -1111,6 +1112,14 @@ static const type_alias_t type_aliases[] = {
     {"smbiostype46", 46},
     {"dmitype46", 46},
     {"dmi46", 46},
+
+    // HP OEM Type 201
+    {"hprack", 201},
+    {"hprackinfo", 201},
+    {"hptype201", 201},
+    {"hp201", 201},
+    {"rackinfo", 201},
+    {"rack", 201},
 
     {NULL, -1}  // Sentinel
 };
@@ -3973,6 +3982,53 @@ static void printType46(lazybiosCTX_t *ctx) {
     }
 }
 
+static void printHPType201(lazybiosCTX_t *ctx) {
+    printf("=== HP OEM TYPE 201 (RACK INFORMATION) ===\n");
+    if (!ctx->HpType201) ctx->HpType201 = lazybiosGetOemHpType201(ctx->HpType201, &ctx->hptype201_count, ctx->DMIData);
+    if (ctx->HpType201 && ctx->hptype201_count > 0) {
+        for (size_t i = 0; i < ctx->hptype201_count; i++) {
+            lazybiosOemHpType201_t *hp201 = &ctx->HpType201[i];
+            if (ctx->hptype201_count > 1) { printf("--- HP Type 201 %zu ---\n", i + 1); }
+            printf("Rack Name: %s\n", hp201->rack_name ? hp201->rack_name : "Not Present");
+            printf("\n");
+        }
+    } else {
+        printf("Failed to get HP OEM Type 201 information\n\n");
+    }
+}
+
+static void print_json(lazybiosCTX_t *ctx) {
+    cJSON *root = cJSON_CreateObject();
+    lazybiosExtJSONAddSMBIOSInfo(ctx->DMIData, ctx->backend, root);
+
+    // Fetch and add types
+    if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
+    lazybiosExtJSONAddType0(ctx->Type0, ctx->type0_count, root);
+    if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
+    lazybiosExtJSONAddType1(ctx->Type1, ctx->type1_count, root);
+    if (!ctx->Type2) ctx->Type2 = lazybiosGetType2(ctx->Type2, &ctx->type2_count, ctx->DMIData);
+    lazybiosExtJSONAddType2(ctx->Type2, ctx->type2_count, root);
+    if (!ctx->Type3) ctx->Type3 = lazybiosGetType3(ctx->Type3, &ctx->type3_count, ctx->DMIData);
+    lazybiosExtJSONAddType3(ctx->Type3, ctx->type3_count, root);
+    if (!ctx->Type4) ctx->Type4 = lazybiosGetType4(ctx->Type4, &ctx->type4_count, ctx->DMIData);
+    lazybiosExtJSONAddType4(ctx->Type4, ctx->type4_count, root);
+    if (!ctx->Type5) ctx->Type5 = lazybiosGetType5(ctx->Type5, &ctx->type5_count, ctx->DMIData);
+    lazybiosExtJSONAddType5(ctx->Type5, ctx->type5_count, root);
+    if (!ctx->Type6) ctx->Type6 = lazybiosGetType6(ctx->Type6, &ctx->type6_count, ctx->DMIData);
+    lazybiosExtJSONAddType6(ctx->Type6, ctx->type6_count, root);
+    if (!ctx->Type7) ctx->Type7 = lazybiosGetType7(ctx->Type7, &ctx->type7_count, ctx->DMIData);
+    lazybiosExtJSONAddType7(ctx->Type7, ctx->type7_count, root);
+    if (!ctx->Type8) ctx->Type8 = lazybiosGetType8(ctx->Type8, &ctx->type8_count, ctx->DMIData);
+    lazybiosExtJSONAddType8(ctx->Type8, ctx->type8_count, root);
+    if (!ctx->Type9) ctx->Type9 = lazybiosGetType9(ctx->Type9, &ctx->type9_count, ctx->DMIData);
+    lazybiosExtJSONAddType9(ctx->Type9, ctx->type9_count, root);
+
+    char *json_str = cJSON_Print(root);
+    printf("%s\n", json_str);
+    free(json_str);
+    cJSON_Delete(root);
+}
+
 int print_smbios_version_info(lazybiosCTX_t *ctx) {
     if (!ctx) return -1;
     printf("=== SMBIOS INFORMATION ===\n");
@@ -4033,7 +4089,7 @@ static void print_tool_versions(void) { printf("Using:\nlazybios: %s\nlazydmi: %
 static int parse_type_number(const char *arg, int *out) {
     char *endptr;
     long num = strtol(arg, &endptr, 10);
-    if (*endptr == '\0' && num >= 0 && num <= 46) {
+    if (*endptr == '\0' && num >= 0 && num <= 255) {
         *out = (int)num;
         return 0;
     }
@@ -4054,9 +4110,10 @@ static void print_usage(FILE *out, const char *progname) {
     fprintf(out, "Inspect the host SMBIOS table, or a table captured in files.\n");
     fprintf(out, "By default, only present types and a concise entry-point summary are shown.\n\n");
     fprintf(out, "Output:\n");
-    fprintf(out, "  -t, --type NUMBER          Show one SMBIOS type (0-46)\n");
+    fprintf(out, "  -t, --type NUMBER          Show one SMBIOS type (0-46 or OEM 200-255)\n");
     fprintf(out, "  -v, --verbose              Show full entry-point and compatibility details\n");
-    fprintf(out, "  -c, --compact              Use concise output (the default)\n\n");
+    fprintf(out, "  -c, --compact              Use concise output (the default)\n");
+    fprintf(out, "  -j, --json                 Output in JSON format (if supported)\n\n");
     fprintf(out, "Input:\n");
     fprintf(out, "  -s, --sources ENTRY DMI    Read separate entry-point and DMI files\n");
     fprintf(out, "  -f, --single-source FILE   Read one merged SMBIOS file\n");
@@ -4120,11 +4177,14 @@ static void print_type_help(FILE *out) {
     fprintf(out, "  Type 44: Processor Additional Information\n");
     fprintf(out, "  Type 45: Firmware Inventory Information\n");
     fprintf(out, "  Type 46: Inactive structure (not used)\n");
+    fprintf(out, "\nOEM Types:\n");
+    fprintf(out, "  Type 201: HP OEM Type 201 (Rack Information)\n");
 }
 
 int main(int argc, const char *argv[]) {
     int print_all = 1;
     int type_to_print = -1;
+    int use_json = 0;
     const char *dump_dir = NULL;
     const char *entry_file = NULL;
     const char *dmi_file = NULL;
@@ -4149,9 +4209,11 @@ int main(int argc, const char *argv[]) {
         } else if (strcmp(argv[i], "--compact") == 0 || strcmp(argv[i], "-c") == 0) {
             verbose_output = 0;
             compact_output = 1;
+        } else if (strcmp(argv[i], "--json") == 0 || strcmp(argv[i], "-j") == 0) {
+            use_json = 1;
         } else if (strcmp(argv[i], "--type") == 0 || strcmp(argv[i], "-t") == 0) {
             if (i + 1 >= argc || parse_type_number(argv[i + 1], &type_to_print) != 0) {
-                fprintf(stderr, "Error: %s requires a type number from 0 to 46\n\n", argv[i]);
+                fprintf(stderr, "Error: %s requires a valid type number (0-46 or OEM 200-255)\n\n", argv[i]);
                 print_usage(stderr, argv[0]);
                 return 2;
             }
@@ -4200,6 +4262,7 @@ int main(int argc, const char *argv[]) {
     if (verbose_output) printf("=============================================\n");
     printf("\n");
 
+
     lazybiosCTX_t *ctx = lazybiosCTXNew();
     if (!ctx) {
         fprintf(stderr, "Failed to allocate lazybios context\n");
@@ -4212,6 +4275,7 @@ int main(int argc, const char *argv[]) {
             lazybiosCleanup(ctx);
             return 1;
         }
+
         char path_entry[1024];
         char path_dmi[1024];
 #if defined(_WIN32) || defined(_WIN64)
@@ -4270,6 +4334,13 @@ int main(int argc, const char *argv[]) {
         }
     }
     if (verbose_output) printf("Library initialized successfully!\n\n");
+
+    if (use_json) {
+        print_json(ctx);
+        lazybiosCleanup(ctx);
+        return 0;
+    }
+
     print_smbios_version_info(ctx);
     if (print_all) {
         if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
@@ -4366,6 +4437,10 @@ int main(int argc, const char *argv[]) {
         if (ctx->type45_count > 0 || verbose_output) printType45(ctx);
         if (!ctx->Type46) ctx->Type46 = lazybiosGetType46(ctx->Type46, &ctx->type46_count, ctx->DMIData);
         if (ctx->type46_count > 0 || verbose_output) printType46(ctx);
+        if (ctx->HpType201 || verbose_output) {
+            if (!ctx->HpType201) ctx->HpType201 = lazybiosGetOemHpType201(ctx->HpType201, &ctx->hptype201_count, ctx->DMIData);
+            if (ctx->hptype201_count > 0 || verbose_output) printHPType201(ctx);
+        }
     } else {
 
         switch (type_to_print) {
@@ -4556,6 +4631,10 @@ int main(int argc, const char *argv[]) {
             case 46:
                 if (!ctx->Type46) ctx->Type46 = lazybiosGetType46(ctx->Type46, &ctx->type46_count, ctx->DMIData);
                 printType46(ctx);
+                break;
+            case 201:
+                if (!ctx->HpType201) ctx->HpType201 = lazybiosGetOemHpType201(ctx->HpType201, &ctx->hptype201_count, ctx->DMIData);
+                printHPType201(ctx);
                 break;
             default:
                 fprintf(stderr, "Error: Type %d is not implemented or invalid\n", type_to_print);
