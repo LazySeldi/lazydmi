@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with lazybios. If not, see <https://www.gnu.org/licenses/>.
  */
-#define LAZYDMI_VER "2.0.0"
+#define LAZYDMI_VER "2.1.0"
 #define LAZYDMI_MAJOR 2
-#define LAZYDMI_MINOR 0
+#define LAZYDMI_MINOR 1
 #define LAZYDMI_PATCH 0
 
 #include <errno.h>
@@ -3997,11 +3997,213 @@ static void printHPType201(lazybiosCTX_t *ctx) {
     }
 }
 
-static void print_json(lazybiosCTX_t *ctx) {
-    cJSON *root = cJSON_CreateObject();
+
+static inline void printJSONType(int type, lazybiosCTX_t* ctx) {
+    cJSON* root = cJSON_CreateObject();
+    switch (type) {
+        case 0:
+            ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
+            lazybiosExtJSONAddType0(ctx->Type0, ctx->type0_count, root);
+            break;
+        case 1:
+            ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
+            lazybiosExtJSONAddType1(ctx->Type1, ctx->type1_count, root);
+            break;
+        case 2:
+            ctx->Type2 = lazybiosGetType2(ctx->Type2, &ctx->type2_count, ctx->DMIData);
+            lazybiosExtJSONAddType2(ctx->Type2, ctx->type2_count, root);
+            break;
+        case 3:
+            ctx->Type3 = lazybiosGetType3(ctx->Type3, &ctx->type3_count, ctx->DMIData);
+            lazybiosExtJSONAddType3(ctx->Type3, ctx->type3_count, root);
+            break;
+        case 4:
+            ctx->Type4 = lazybiosGetType4(ctx->Type4, &ctx->type4_count, ctx->DMIData);
+            lazybiosExtJSONAddType4(ctx->Type4, ctx->type4_count, root);
+            break;
+        case 5:
+            ctx->Type5 = lazybiosGetType5(ctx->Type5, &ctx->type5_count, ctx->DMIData);
+            lazybiosExtJSONAddType5(ctx->Type5, ctx->type5_count, root);
+            break;
+        case 6:
+            ctx->Type6 = lazybiosGetType6(ctx->Type6, &ctx->type6_count, ctx->DMIData);
+            lazybiosExtJSONAddType6(ctx->Type6, ctx->type6_count, root);
+            break;
+        case 7:
+            ctx->Type7 = lazybiosGetType7(ctx->Type7, &ctx->type7_count, ctx->DMIData);
+            lazybiosExtJSONAddType7(ctx->Type7, ctx->type7_count, root);
+            break;
+        case 8:
+            ctx->Type8 = lazybiosGetType8(ctx->Type8, &ctx->type8_count, ctx->DMIData);
+            lazybiosExtJSONAddType8(ctx->Type8, ctx->type8_count, root);
+            break;
+        case 9:
+            ctx->Type9 = lazybiosGetType9(ctx->Type9, &ctx->type9_count, ctx->DMIData);
+            lazybiosExtJSONAddType9(ctx->Type9, ctx->type9_count, root);
+            break;
+        case 10:
+            ctx->Type10 = lazybiosGetType10(ctx->Type10, &ctx->type10_count, ctx->DMIData);
+            lazybiosExtJSONAddType10(ctx->Type10, ctx->type10_count, root);
+            break;
+        case 11:
+            ctx->Type11 = lazybiosGetType11(ctx->Type11, &ctx->type11_count, ctx->DMIData);
+            lazybiosExtJSONAddType11(ctx->Type11, ctx->type11_count, root);
+            break;
+        case 12:
+            ctx->Type12 = lazybiosGetType12(ctx->Type12, &ctx->type12_count, ctx->DMIData);
+            lazybiosExtJSONAddType12(ctx->Type12, ctx->type12_count, root);
+            break;
+        case 13:
+            ctx->Type13 = lazybiosGetType13(ctx->Type13, &ctx->type13_count, ctx->DMIData);
+            lazybiosExtJSONAddType13(ctx->Type13, ctx->type13_count, root);
+            break;
+        case 14:
+            ctx->Type14 = lazybiosGetType14(ctx->Type14, &ctx->type14_count, ctx->DMIData);
+            lazybiosExtJSONAddType14(ctx->Type14, ctx->type14_count, root);
+            break;
+        case 15:
+            ctx->Type15 = lazybiosGetType15(ctx->Type15, &ctx->type15_count, ctx->DMIData);
+            lazybiosExtJSONAddType15(ctx->Type15, ctx->type15_count, root);
+            break;
+        case 16:
+            ctx->Type16 = lazybiosGetType16(ctx->Type16, &ctx->type16_count, ctx->DMIData);
+            lazybiosExtJSONAddType16(ctx->Type16, ctx->type16_count, root);
+            break;
+        case 17:
+            ctx->Type17 = lazybiosGetType17(ctx->Type17, &ctx->type17_count, ctx->DMIData);
+            lazybiosExtJSONAddType17(ctx->Type17, ctx->type17_count, root);
+            break;
+        case 18:
+            ctx->Type18 = lazybiosGetType18(ctx->Type18, &ctx->type18_count, ctx->DMIData);
+            lazybiosExtJSONAddType18(ctx->Type18, ctx->type18_count, root);
+            break;
+        case 19:
+            ctx->Type19 = lazybiosGetType19(ctx->Type19, &ctx->type19_count, ctx->DMIData);
+            lazybiosExtJSONAddType19(ctx->Type19, ctx->type19_count, root);
+            break;
+        case 20:
+            ctx->Type20 = lazybiosGetType20(ctx->Type20, &ctx->type20_count, ctx->DMIData);
+            lazybiosExtJSONAddType20(ctx->Type20, ctx->type20_count, root);
+            break;
+        case 21:
+            ctx->Type21 = lazybiosGetType21(ctx->Type21, &ctx->type21_count, ctx->DMIData);
+            lazybiosExtJSONAddType21(ctx->Type21, ctx->type21_count, root);
+            break;
+        case 22:
+            ctx->Type22 = lazybiosGetType22(ctx->Type22, &ctx->type22_count, ctx->DMIData);
+            lazybiosExtJSONAddType22(ctx->Type22, ctx->type22_count, root);
+            break;
+        case 23:
+            ctx->Type23 = lazybiosGetType23(ctx->Type23, &ctx->type23_count, ctx->DMIData);
+            lazybiosExtJSONAddType23(ctx->Type23, ctx->type23_count, root);
+            break;
+        case 24:
+            ctx->Type24 = lazybiosGetType24(ctx->Type24, &ctx->type24_count, ctx->DMIData);
+            lazybiosExtJSONAddType24(ctx->Type24, ctx->type24_count, root);
+            break;
+        case 25:
+            ctx->Type25 = lazybiosGetType25(ctx->Type25, &ctx->type25_count, ctx->DMIData);
+            lazybiosExtJSONAddType25(ctx->Type25, ctx->type25_count, root);
+            break;
+        case 26:
+            ctx->Type26 = lazybiosGetType26(ctx->Type26, &ctx->type26_count, ctx->DMIData);
+            lazybiosExtJSONAddType26(ctx->Type26, ctx->type26_count, root);
+            break;
+        case 27:
+            ctx->Type27 = lazybiosGetType27(ctx->Type27, &ctx->type27_count, ctx->DMIData);
+            lazybiosExtJSONAddType27(ctx->Type27, ctx->type27_count, root);
+            break;
+        case 28:
+            ctx->Type28 = lazybiosGetType28(ctx->Type28, &ctx->type28_count, ctx->DMIData);
+            lazybiosExtJSONAddType28(ctx->Type28, ctx->type28_count, root);
+            break;
+        case 29:
+            ctx->Type29 = lazybiosGetType29(ctx->Type29, &ctx->type29_count, ctx->DMIData);
+            lazybiosExtJSONAddType29(ctx->Type29, ctx->type29_count, root);
+            break;
+        case 30:
+            ctx->Type30 = lazybiosGetType30(ctx->Type30, &ctx->type30_count, ctx->DMIData);
+            lazybiosExtJSONAddType30(ctx->Type30, ctx->type30_count, root);
+            break;
+        case 31:
+            ctx->Type31 = lazybiosGetType31(ctx->Type31, &ctx->type31_count, ctx->DMIData);
+            lazybiosExtJSONAddType31(ctx->Type31, ctx->type31_count, root);
+            break;
+        case 32:
+            ctx->Type32 = lazybiosGetType32(ctx->Type32, &ctx->type32_count, ctx->DMIData);
+            lazybiosExtJSONAddType32(ctx->Type32, ctx->type32_count, root);
+            break;
+        case 33:
+            ctx->Type33 = lazybiosGetType33(ctx->Type33, &ctx->type33_count, ctx->DMIData);
+            lazybiosExtJSONAddType33(ctx->Type33, ctx->type33_count, root);
+            break;
+        case 34:
+            ctx->Type34 = lazybiosGetType34(ctx->Type34, &ctx->type34_count, ctx->DMIData);
+            lazybiosExtJSONAddType34(ctx->Type34, ctx->type34_count, root);
+            break;
+        case 35:
+            ctx->Type35 = lazybiosGetType35(ctx->Type35, &ctx->type35_count, ctx->DMIData);
+            lazybiosExtJSONAddType35(ctx->Type35, ctx->type35_count, root);
+            break;
+        case 36:
+            ctx->Type36 = lazybiosGetType36(ctx->Type36, &ctx->type36_count, ctx->DMIData);
+            lazybiosExtJSONAddType36(ctx->Type36, ctx->type36_count, root);
+            break;
+        case 37:
+            ctx->Type37 = lazybiosGetType37(ctx->Type37, &ctx->type37_count, ctx->DMIData);
+            lazybiosExtJSONAddType37(ctx->Type37, ctx->type37_count, root);
+            break;
+        case 38:
+            ctx->Type38 = lazybiosGetType38(ctx->Type38, &ctx->type38_count, ctx->DMIData);
+            lazybiosExtJSONAddType38(ctx->Type38, ctx->type38_count, root);
+            break;
+        case 39:
+            ctx->Type39 = lazybiosGetType39(ctx->Type39, &ctx->type39_count, ctx->DMIData);
+            lazybiosExtJSONAddType39(ctx->Type39, ctx->type39_count, root);
+            break;
+        case 40:
+            ctx->Type40 = lazybiosGetType40(ctx->Type40, &ctx->type40_count, ctx->DMIData);
+            lazybiosExtJSONAddType40(ctx->Type40, ctx->type40_count, root);
+            break;
+        case 41:
+            ctx->Type41 = lazybiosGetType41(ctx->Type41, &ctx->type41_count, ctx->DMIData);
+            lazybiosExtJSONAddType41(ctx->Type41, ctx->type41_count, root);
+            break;
+        case 42:
+            ctx->Type42 = lazybiosGetType42(ctx->Type42, &ctx->type42_count, ctx->DMIData);
+            lazybiosExtJSONAddType42(ctx->Type42, ctx->type42_count, root);
+            break;
+        case 43:
+            ctx->Type43 = lazybiosGetType43(ctx->Type43, &ctx->type43_count, ctx->DMIData);
+            lazybiosExtJSONAddType43(ctx->Type43, ctx->type43_count, root);
+            break;
+        case 44:
+            ctx->Type44 = lazybiosGetType44(ctx->Type44, &ctx->type44_count, ctx->DMIData);
+            lazybiosExtJSONAddType44(ctx->Type44, ctx->type44_count, root);
+            break;
+        case 45:
+            ctx->Type45 = lazybiosGetType45(ctx->Type45, &ctx->type45_count, ctx->DMIData);
+            lazybiosExtJSONAddType45(ctx->Type45, ctx->type45_count, root);
+            break;
+        case 46:
+            ctx->Type46 = lazybiosGetType46(ctx->Type46, &ctx->type46_count, ctx->DMIData);
+            lazybiosExtJSONAddType46(ctx->Type46, ctx->type46_count, root);
+            break;
+        default:
+            printf("Invalid Type!");
+            break;
+    }
+
+    char *json_str = cJSON_Print(root);
+    printf("%s\n", json_str);
+    free(json_str);
+    cJSON_Delete(root);
+}
+
+static inline void printJSONAll(lazybiosCTX_t *ctx) {
+    cJSON* root = cJSON_CreateObject();
     lazybiosExtJSONAddSMBIOSInfo(ctx->DMIData, ctx->backend, root);
 
-    // Fetch and add types
     if (!ctx->Type0) ctx->Type0 = lazybiosGetType0(ctx->Type0, &ctx->type0_count, ctx->DMIData);
     lazybiosExtJSONAddType0(ctx->Type0, ctx->type0_count, root);
     if (!ctx->Type1) ctx->Type1 = lazybiosGetType1(ctx->Type1, &ctx->type1_count, ctx->DMIData);
@@ -4022,6 +4224,80 @@ static void print_json(lazybiosCTX_t *ctx) {
     lazybiosExtJSONAddType8(ctx->Type8, ctx->type8_count, root);
     if (!ctx->Type9) ctx->Type9 = lazybiosGetType9(ctx->Type9, &ctx->type9_count, ctx->DMIData);
     lazybiosExtJSONAddType9(ctx->Type9, ctx->type9_count, root);
+    if (!ctx->Type10) ctx->Type10 = lazybiosGetType10(ctx->Type10, &ctx->type10_count, ctx->DMIData);
+    lazybiosExtJSONAddType10(ctx->Type10, ctx->type10_count, root);
+    if (!ctx->Type11) ctx->Type11 = lazybiosGetType11(ctx->Type11, &ctx->type11_count, ctx->DMIData);
+    lazybiosExtJSONAddType11(ctx->Type11, ctx->type11_count, root);
+    if (!ctx->Type12) ctx->Type12 = lazybiosGetType12(ctx->Type12, &ctx->type12_count, ctx->DMIData);
+    lazybiosExtJSONAddType12(ctx->Type12, ctx->type12_count, root);
+    if (!ctx->Type13) ctx->Type13 = lazybiosGetType13(ctx->Type13, &ctx->type13_count, ctx->DMIData);
+    lazybiosExtJSONAddType13(ctx->Type13, ctx->type13_count, root);
+    if (!ctx->Type14) ctx->Type14 = lazybiosGetType14(ctx->Type14, &ctx->type14_count, ctx->DMIData);
+    lazybiosExtJSONAddType14(ctx->Type14, ctx->type14_count, root);
+    if (!ctx->Type15) ctx->Type15 = lazybiosGetType15(ctx->Type15, &ctx->type15_count, ctx->DMIData);
+    lazybiosExtJSONAddType15(ctx->Type15, ctx->type15_count, root);
+    if (!ctx->Type16) ctx->Type16 = lazybiosGetType16(ctx->Type16, &ctx->type16_count, ctx->DMIData);
+    lazybiosExtJSONAddType16(ctx->Type16, ctx->type16_count, root);
+    if (!ctx->Type17) ctx->Type17 = lazybiosGetType17(ctx->Type17, &ctx->type17_count, ctx->DMIData);
+    lazybiosExtJSONAddType17(ctx->Type17, ctx->type17_count, root);
+    if (!ctx->Type18) ctx->Type18 = lazybiosGetType18(ctx->Type18, &ctx->type18_count, ctx->DMIData);
+    lazybiosExtJSONAddType18(ctx->Type18, ctx->type18_count, root);
+    if (!ctx->Type19) ctx->Type19 = lazybiosGetType19(ctx->Type19, &ctx->type19_count, ctx->DMIData);
+    lazybiosExtJSONAddType19(ctx->Type19, ctx->type19_count, root);
+    if (!ctx->Type20) ctx->Type20 = lazybiosGetType20(ctx->Type20, &ctx->type20_count, ctx->DMIData);
+    lazybiosExtJSONAddType20(ctx->Type20, ctx->type20_count, root);
+    if (!ctx->Type21) ctx->Type21 = lazybiosGetType21(ctx->Type21, &ctx->type21_count, ctx->DMIData);
+    lazybiosExtJSONAddType21(ctx->Type21, ctx->type21_count, root);
+    if (!ctx->Type22) ctx->Type22 = lazybiosGetType22(ctx->Type22, &ctx->type22_count, ctx->DMIData);
+    lazybiosExtJSONAddType22(ctx->Type22, ctx->type22_count, root);
+    if (!ctx->Type23) ctx->Type23 = lazybiosGetType23(ctx->Type23, &ctx->type23_count, ctx->DMIData);
+    lazybiosExtJSONAddType23(ctx->Type23, ctx->type23_count, root);
+    if (!ctx->Type24) ctx->Type24 = lazybiosGetType24(ctx->Type24, &ctx->type24_count, ctx->DMIData);
+    lazybiosExtJSONAddType24(ctx->Type24, ctx->type24_count, root);
+    if (!ctx->Type25) ctx->Type25 = lazybiosGetType25(ctx->Type25, &ctx->type25_count, ctx->DMIData);
+    lazybiosExtJSONAddType25(ctx->Type25, ctx->type25_count, root);
+    if (!ctx->Type26) ctx->Type26 = lazybiosGetType26(ctx->Type26, &ctx->type26_count, ctx->DMIData);
+    lazybiosExtJSONAddType26(ctx->Type26, ctx->type26_count, root);
+    if (!ctx->Type27) ctx->Type27 = lazybiosGetType27(ctx->Type27, &ctx->type27_count, ctx->DMIData);
+    lazybiosExtJSONAddType27(ctx->Type27, ctx->type27_count, root);
+    if (!ctx->Type28) ctx->Type28 = lazybiosGetType28(ctx->Type28, &ctx->type28_count, ctx->DMIData);
+    lazybiosExtJSONAddType28(ctx->Type28, ctx->type28_count, root);
+    if (!ctx->Type29) ctx->Type29 = lazybiosGetType29(ctx->Type29, &ctx->type29_count, ctx->DMIData);
+    lazybiosExtJSONAddType29(ctx->Type29, ctx->type29_count, root);
+    if (!ctx->Type30) ctx->Type30 = lazybiosGetType30(ctx->Type30, &ctx->type30_count, ctx->DMIData);
+    lazybiosExtJSONAddType30(ctx->Type30, ctx->type30_count, root);
+    if (!ctx->Type31) ctx->Type31 = lazybiosGetType31(ctx->Type31, &ctx->type31_count, ctx->DMIData);
+    lazybiosExtJSONAddType31(ctx->Type31, ctx->type31_count, root);
+    if (!ctx->Type32) ctx->Type32 = lazybiosGetType32(ctx->Type32, &ctx->type32_count, ctx->DMIData);
+    lazybiosExtJSONAddType32(ctx->Type32, ctx->type32_count, root);
+    if (!ctx->Type33) ctx->Type33 = lazybiosGetType33(ctx->Type33, &ctx->type33_count, ctx->DMIData);
+    lazybiosExtJSONAddType33(ctx->Type33, ctx->type33_count, root);
+    if (!ctx->Type34) ctx->Type34 = lazybiosGetType34(ctx->Type34, &ctx->type34_count, ctx->DMIData);
+    lazybiosExtJSONAddType34(ctx->Type34, ctx->type34_count, root);
+    if (!ctx->Type35) ctx->Type35 = lazybiosGetType35(ctx->Type35, &ctx->type35_count, ctx->DMIData);
+    lazybiosExtJSONAddType35(ctx->Type35, ctx->type35_count, root);
+    if (!ctx->Type36) ctx->Type36 = lazybiosGetType36(ctx->Type36, &ctx->type36_count, ctx->DMIData);
+    lazybiosExtJSONAddType36(ctx->Type36, ctx->type36_count, root);
+    if (!ctx->Type37) ctx->Type37 = lazybiosGetType37(ctx->Type37, &ctx->type37_count, ctx->DMIData);
+    lazybiosExtJSONAddType37(ctx->Type37, ctx->type37_count, root);
+    if (!ctx->Type38) ctx->Type38 = lazybiosGetType38(ctx->Type38, &ctx->type38_count, ctx->DMIData);
+    lazybiosExtJSONAddType38(ctx->Type38, ctx->type38_count, root);
+    if (!ctx->Type39) ctx->Type39 = lazybiosGetType39(ctx->Type39, &ctx->type39_count, ctx->DMIData);
+    lazybiosExtJSONAddType39(ctx->Type39, ctx->type39_count, root);
+    if (!ctx->Type40) ctx->Type40 = lazybiosGetType40(ctx->Type40, &ctx->type40_count, ctx->DMIData);
+    lazybiosExtJSONAddType40(ctx->Type40, ctx->type40_count, root);
+    if (!ctx->Type41) ctx->Type41 = lazybiosGetType41(ctx->Type41, &ctx->type41_count, ctx->DMIData);
+    lazybiosExtJSONAddType41(ctx->Type41, ctx->type41_count, root);
+    if (!ctx->Type42) ctx->Type42 = lazybiosGetType42(ctx->Type42, &ctx->type42_count, ctx->DMIData);
+    lazybiosExtJSONAddType42(ctx->Type42, ctx->type42_count, root);
+    if (!ctx->Type43) ctx->Type43 = lazybiosGetType43(ctx->Type43, &ctx->type43_count, ctx->DMIData);
+    lazybiosExtJSONAddType43(ctx->Type43, ctx->type43_count, root);
+    if (!ctx->Type44) ctx->Type44 = lazybiosGetType44(ctx->Type44, &ctx->type44_count, ctx->DMIData);
+    lazybiosExtJSONAddType44(ctx->Type44, ctx->type44_count, root);
+    if (!ctx->Type45) ctx->Type45 = lazybiosGetType45(ctx->Type45, &ctx->type45_count, ctx->DMIData);
+    lazybiosExtJSONAddType45(ctx->Type45, ctx->type45_count, root);
+    if (!ctx->Type46) ctx->Type46 = lazybiosGetType46(ctx->Type46, &ctx->type46_count, ctx->DMIData);
+    lazybiosExtJSONAddType46(ctx->Type46, ctx->type46_count, root);
 
     char *json_str = cJSON_Print(root);
     printf("%s\n", json_str);
@@ -4029,7 +4305,7 @@ static void print_json(lazybiosCTX_t *ctx) {
     cJSON_Delete(root);
 }
 
-int print_smbios_version_info(lazybiosCTX_t *ctx) {
+static int print_smbios_version_info(lazybiosCTX_t *ctx) {
     if (!ctx) return -1;
     printf("=== SMBIOS INFORMATION ===\n");
     lazybiosPrintSMVer(ctx);
@@ -4113,7 +4389,7 @@ static void print_usage(FILE *out, const char *progname) {
     fprintf(out, "  -t, --type NUMBER          Show one SMBIOS type (0-46 or OEM 200-255)\n");
     fprintf(out, "  -v, --verbose              Show full entry-point and compatibility details\n");
     fprintf(out, "  -c, --compact              Use concise output (the default)\n");
-    fprintf(out, "  -j, --json                 Output in JSON format (if supported)\n\n");
+    fprintf(out, "  -j, --json                 Output in JSON format\n\n");
     fprintf(out, "Input:\n");
     fprintf(out, "  -s, --sources ENTRY DMI    Read separate entry-point and DMI files\n");
     fprintf(out, "  -f, --single-source FILE   Read one merged SMBIOS file\n");
@@ -4336,7 +4612,12 @@ int main(int argc, const char *argv[]) {
     if (verbose_output) printf("Library initialized successfully!\n\n");
 
     if (use_json) {
-        print_json(ctx);
+        if (type_to_print == -1) {
+            printJSONAll(ctx);
+        } else if (type_to_print <= 46) {
+            printJSONType(type_to_print, ctx);
+        }
+
         lazybiosCleanup(ctx);
         return 0;
     }
